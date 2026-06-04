@@ -10,7 +10,6 @@ function renderRelatorios(){
     </h2>
 
     <div class="card">
-       <div class="card">
 
         <h3>
             Gerar Relatório Financeiro
@@ -46,6 +45,9 @@ function renderRelatorios(){
             Gerar PDF
         </button>
 
+    </div>
+      <div class="card">
+
         <h3>
             Gerar Relatório Financeiro
         </h3>
@@ -53,7 +55,7 @@ function renderRelatorios(){
         <br>
 
         <p>
-            O relatório contém:
+            O Relatório GERAL contém:
         </p>
 
         <br>

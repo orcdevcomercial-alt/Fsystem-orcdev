@@ -166,7 +166,7 @@ async function gerarPDF(){
     pdf.rect(
         10,
         10,
-        155,
+        140,
         8,
         "F"
     );
@@ -176,10 +176,10 @@ async function gerarPDF(){
         pdf.addImage(
             logo,
             "PNG",
-            168,
-            8,
-            28,
-            18
+              130, //x
+            -18,//Y
+            100,//tamanho altura
+            80//largura
         );
 
     }catch(e){

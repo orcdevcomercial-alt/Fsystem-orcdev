@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Finanças ORCDev</title>
+
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/mobile.css">
+
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+
+<div class="logo">
+ORCDev
+</div>
+
+<nav>
+
+<button onclick="renderDashboard()">
+Dashboard
+</button>
+
+<button onclick="renderMovimentacoes()">
+Movimentações
+</button>
+
+<button onclick="renderCaixinhas()">
+Caixinhas
+</button>
+
+<button onclick="paginaEmConstrucao('Reposição')">
+Controle de Reposição
+</button>
+
+<button onclick="renderHistorico()">
+    Histórico
+    </button>
+
+    <button onclick="renderRelatorios()">
+        Relatórios
+        </button>
+
+<button onclick="paginaEmConstrucao('Backup')">
+Backup
+</button>
+
+<button onclick="renderConfig()">
+Configurações
+</button>
+
+<button id="btnLogout" class="botaoclick">
+    Logout
+</button>
+    
+
+</nav>
+
+</aside>
+
+<main>
+
+<header>
+
+<button id="menuBtn">
+☰
+</button>
+
+<h2>Sistema Financeiro</h2>
+
+</header>
+
+<div
+class="content"
+id="page-content">
+</div>
+
+</main>
+
+</div>
+
+<div id="toastContainer"></div>
+
+<!--começa link o gerador de pdf-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!--para o gerador de pdf-->
+<script src="js/financeiro.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/dashboard.js"></script>
+
+<script src="js/historico.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/caixinhas.js"></script>
+<script src="js/movimentacoes.js"></script>
+<script src="js/configuracoes.js"></script>
+<script src="js/relatorios.js"></script>
+
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/database.js"></script>
+<script type="module" src="js/app.js"></script>
+<script type="module" src="js/storage.js"></script>
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+:root{
+
+    --primary:#1105be;
+
+    --bg:#f5f6fa;
+
+    --card:#ffffff;
+
+    --text:#222;
+
+    --border:#e5e5e5;
+
+    --shadow:
+    0 4px 16px rgba(0,0,0,.08);
+
+}
+
+body.dark{
+
+    --bg:#121212;
+
+    --card:#1d1d1d;
+
+    --text:#f2f2f2;
+
+    --border:#2d2d2d;
+
+    --shadow:
+    0 4px 16px rgba(0,0,0,.35);
+   
+
+}

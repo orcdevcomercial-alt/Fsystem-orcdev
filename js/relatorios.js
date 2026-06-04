@@ -10,6 +10,41 @@ function renderRelatorios(){
     </h2>
 
     <div class="card">
+       <div class="card">
+
+        <h3>
+            Gerar Relatório Financeiro
+        </h3>
+
+        <br>
+
+        <p>
+            O Relatório MENSAL contém:
+        </p>
+
+        <br>
+
+        <ul>
+
+            <li>Resumo financeiro do mês atual</li>
+
+            <li>Conta principal</li>
+
+            <li>Caixinhas</li>
+
+            <li>Receitas</li>
+
+            <li>Despesas</li>
+
+            <li>Histórico completo</li>
+
+        </ul>
+
+        <br>
+
+        <button class="botaoclick" onclick="gerarPDF()">
+            Gerar PDF
+        </button>
 
         <h3>
             Gerar Relatório Financeiro

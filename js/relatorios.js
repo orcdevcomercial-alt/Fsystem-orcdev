@@ -1,4 +1,7 @@
-//começa função de gerar relatórios
+// =====================================
+// TELA DE RELATÓRIOS
+// =====================================
+
 function renderRelatorios(){
 
     document.getElementById(
@@ -12,13 +15,13 @@ function renderRelatorios(){
     <div class="card">
 
         <h3>
-            Gerar Relatório Financeiro
+            Relatório Mensal
         </h3>
 
         <br>
 
         <p>
-            O Relatório MENSAL contém:
+            O relatório mensal contém:
         </p>
 
         <br>
@@ -27,42 +30,44 @@ function renderRelatorios(){
 
             <li>Resumo financeiro do mês atual</li>
 
-            <li>Conta principal</li>
+            <li>Receitas do mês</li>
+
+            <li>Despesas do mês</li>
+
+            <li>Movimentações do mês</li>
 
             <li>Caixinhas</li>
-
-            <li>Receitas</li>
-
-            <li>Despesas</li>
-
-            <li>Histórico completo</li>
 
         </ul>
 
         <br>
 
-        <button class="botaoclick" onclick="gerarPDF()">
-            Gerar PDF
+        <button
+            class="botaoclick"
+            onclick="gerarPDFmensal()"
+        >
+            Gerar PDF Mensal
         </button>
 
     </div>
-      <div class="card">
+
+    <div class="card">
 
         <h3>
-            Gerar Relatório Financeiro
+            Relatório Geral
         </h3>
 
         <br>
 
         <p>
-            O Relatório GERAL contém:
+            O relatório geral contém:
         </p>
 
         <br>
 
         <ul>
 
-            <li>Resumo financeiro</li>
+            <li>Resumo financeiro completo</li>
 
             <li>Conta principal</li>
 
@@ -78,24 +83,33 @@ function renderRelatorios(){
 
         <br>
 
-        <button class="botaoclick" onclick="gerarPDF()">
-            Gerar PDF
+        <button
+            class="botaoclick"
+            onclick="gerarPDFgeral()"
+        >
+            Gerar PDF Geral
         </button>
 
     </div>
 
     `;
-fecharMenuMobile();
+
+    fecharMenuMobile();
+
 }
-//termina função de gerar relatórios
-//Começa gerador de logo
+
+// =====================================
+// CARREGAMENTO DA LOGO
+// =====================================
+
 function carregarLogo(){
 
     return new Promise((resolve)=>{
 
         const img = new Image();
 
-        img.src = "assets/logo/logodopdf.png";
+        img.src =
+        "assets/logo/logodopdf.png";
 
         img.onload = ()=>{
 
@@ -131,31 +145,305 @@ function carregarLogo(){
 
         };
 
+        img.onerror = ()=>{
+
+            console.log(
+                "Logo não encontrada"
+            );
+
+            resolve(null);
+
+        };
+
     });
 
 }
-//Termina logo
-//começa async de gerar pdf
-async function gerarPDF(){
 
-    const { jsPDF } = window.jspdf;
+// =====================================
+// HISTÓRICO DO MÊS ATUAL
+// =====================================
 
-    const pdf = new jsPDF(
+function obterHistoricoMesAtual(){
+
+    const hoje =
+    new Date();
+
+    const mesAtual =
+    hoje.getMonth();
+
+    const anoAtual =
+    hoje.getFullYear();
+
+    return data.historico.filter(item=>{
+
+        if(
+            !item.data
+        ){
+            return false;
+        }
+
+        const dataMov =
+        new Date(item.data);
+
+        return (
+
+            dataMov.getMonth()
+            === mesAtual
+
+            &&
+
+            dataMov.getFullYear()
+            === anoAtual
+
+        );
+
+    });
+
+}
+
+// =====================================
+// RECEITAS DO MÊS
+// =====================================
+
+function receitasMesRelatorio(){
+
+    const historico =
+
+    obterHistoricoMesAtual();
+
+    return historico
+
+    .filter(item=>
+
+        item.tipo === "receita"
+
+        ||
+
+        item.tipo === "resgate"
+
+    )
+
+    .reduce(
+
+        (total,item)=>
+
+        total + item.valor,
+
+        0
+
+    );
+
+}
+
+// =====================================
+// DESPESAS DO MÊS
+// =====================================
+
+function despesasMesRelatorio(){
+
+    const historico =
+
+    obterHistoricoMesAtual();
+
+    return historico
+
+    .filter(item=>
+
+        item.tipo === "despesa"
+
+        ||
+
+        item.tipo === "deposito"
+
+    )
+
+    .reduce(
+
+        (total,item)=>
+
+        total + item.valor,
+
+        0
+
+    );
+
+}
+
+// =====================================
+// REFERÊNCIA MENSAL
+// =====================================
+
+function referenciaMesAtual(){
+
+    return new Date()
+
+    .toLocaleDateString(
+
+        "pt-BR",
+
+        {
+
+            month:"long",
+
+            year:"numeric"
+
+        }
+
+    );
+
+}
+
+// =====================================
+// TOTAL DE RECEITAS DE UM HISTÓRICO
+// =====================================
+
+function calcularReceitas(
+
+    historico
+
+){
+
+    return historico
+
+    .filter(item=>
+
+        item.tipo === "receita"
+
+        ||
+
+        item.tipo === "resgate"
+
+    )
+
+    .reduce(
+
+        (total,item)=>
+
+        total + item.valor,
+
+        0
+
+    );
+
+}
+
+// =====================================
+// TOTAL DE DESPESAS DE UM HISTÓRICO
+// =====================================
+
+function calcularDespesas(
+
+    historico
+
+){
+
+    return historico
+
+    .filter(item=>
+
+        item.tipo === "despesa"
+
+        ||
+
+        item.tipo === "deposito"
+
+    )
+
+    .reduce(
+
+        (total,item)=>
+
+        total + item.valor,
+
+        0
+
+    );
+
+}
+
+// =====================================
+// SALDO ACUMULADO DO HISTÓRICO
+// =====================================
+
+function calcularSaldoMovimentacoes(
+
+    historico
+
+){
+
+    let saldo = 0;
+
+    historico.forEach(item=>{
+
+        if(
+
+            item.tipo === "receita"
+
+            ||
+
+            item.tipo === "resgate"
+
+        ){
+
+            saldo += item.valor;
+
+        }
+
+        else if(
+
+            item.tipo === "despesa"
+
+            ||
+
+            item.tipo === "deposito"
+
+        ){
+
+            saldo -= item.valor;
+
+        }
+
+    });
+
+    return saldo;
+
+}
+// =====================================
+// GERADOR PRINCIPAL PDF
+// =====================================
+
+async function gerarPDF(
+
+    historico,
+
+    titulo,
+
+    receitas,
+
+    despesas,
+
+    referencia = null
+
+){
+
+    const { jsPDF } =
+    window.jspdf;
+
+    const pdf =
+    new jsPDF(
         "p",
         "mm",
         "a4"
     );
 
-    const logo = await carregarLogo();
-
-    const pageWidth = 210;
-    const pageHeight = 297;
+    const logo =
+    await carregarLogo();
 
     let y = 15;
 
-    // =========================
+    // =====================================
     // CABEÇALHO
-    // =========================
+    // =====================================
 
     pdf.setFillColor(
         0,
@@ -171,26 +459,39 @@ async function gerarPDF(){
         "F"
     );
 
-    try{
+    if(logo){
 
-        pdf.addImage(
-            logo,
-            "PNG",
-              130, //x
-            -18,//Y
-            100,//tamanho altura
-            80//largura
-        );
+        try{
 
-    }catch(e){
+            pdf.addImage(
 
-        console.log(
-            "Logo não carregada"
-        );
+                logo,
+
+                "PNG",
+
+                145,
+
+                -8,
+
+                60,
+
+                48
+
+            );
+
+        }catch(e){
+
+            console.log(
+                "Erro ao carregar logo"
+            );
+
+        }
 
     }
 
-    pdf.setFontSize(18);
+    pdf.setFontSize(
+        18
+    );
 
     pdf.setTextColor(
         0,
@@ -199,9 +500,9 @@ async function gerarPDF(){
     );
 
     pdf.text(
-        "ORCDev",
-        168,
-        30
+        titulo,
+        10,
+        32
     );
 
     pdf.setTextColor(
@@ -210,23 +511,39 @@ async function gerarPDF(){
         0
     );
 
-    y = 40;
-
-    pdf.setFontSize(11);
-
-    pdf.text(
-        "EXTRATO FINANCEIRO",
-        10,
-        y
+    pdf.setFontSize(
+        10
     );
 
     pdf.text(
-        dataAtual(),
-        145,
-        y
+
+        `Emitido em: ${dataAtual()}`,
+
+        125,
+
+        32
+
     );
 
-    y += 8;
+    if(referencia){
+
+        pdf.setFontSize(
+            9
+        );
+
+        pdf.text(
+
+            `Referência: ${referencia}`,
+
+            10,
+
+            38
+
+        );
+
+    }
+
+    y = 45;
 
     pdf.line(
         10,
@@ -235,13 +552,15 @@ async function gerarPDF(){
         y
     );
 
-    y += 8;
+    y += 10;
 
-    // =========================
-    // RESUMO
-    // =========================
+    // =====================================
+    // RESUMO FINANCEIRO
+    // =====================================
 
-    pdf.setFontSize(12);
+    pdf.setFontSize(
+        13
+    );
 
     pdf.text(
         "RESUMO FINANCEIRO",
@@ -249,96 +568,104 @@ async function gerarPDF(){
         y
     );
 
-    y += 8;
-
-    pdf.setFontSize(10);
-
-    pdf.text(
-        `Conta Principal: ${formatarMoeda(data.conta.saldo)}`,
-        15,
-        y
-    );
-
     y += 6;
-
-    pdf.text(
-        `Total em Caixinhas: ${formatarMoeda(totalCaixinhas())}`,
-        15,
-        y
-    );
-
-    y += 6;
-
-    pdf.text(
-        `Patrimônio Total: ${formatarMoeda(patrimonio())}`,
-        15,
-        y
-    );
-
-    y += 6;
-
-    pdf.text(
-        `Receitas: ${formatarMoeda(receitasMes())}`,
-        15,
-        y
-    );
-
-    y += 6;
-
-    pdf.text(
-        `Despesas: ${formatarMoeda(gastosMes())}`,
-        15,
-        y
-    );
-
-    y += 12;
-
-    // =========================
-    // HISTÓRICO
-    // =========================
-
-    pdf.setFontSize(12);
-
-    pdf.text(
-        "DEMONSTRATIVO DE MOVIMENTAÇÕES",
-        10,
-        y
-    );
-
-    y += 8;
-
-    pdf.setFillColor(
-        220,
-        220,
-        220
-    );
 
     pdf.rect(
         10,
-        y-5,
+        y,
         190,
-        8,
-        "F"
+        38
     );
 
-    pdf.setFontSize(9);
+    y += 8;
 
-    pdf.text("DATA",12,y);
-    pdf.text("TIPO",45,y);
-    pdf.text("DESCRIÇÃO",75,y);
-    pdf.text("VALOR",150,y);
-    pdf.text("SALDO",178,y);
+    pdf.setFontSize(
+        10
+    );
+
+    pdf.text(
+
+        `Conta Principal: ${formatarMoeda(data.conta.saldo)}`,
+
+        15,
+
+        y
+
+    );
+
+    y += 6;
+
+    pdf.text(
+
+        `Total em Caixinhas: ${formatarMoeda(totalCaixinhas())}`,
+
+        15,
+
+        y
+
+    );
+
+    y += 6;
+
+    pdf.text(
+
+        `Patrimônio Total: ${formatarMoeda(patrimonio())}`,
+
+        15,
+
+        y
+
+    );
+
+    y += 6;
+
+    pdf.text(
+
+        `Receitas: ${formatarMoeda(receitas)}`,
+
+        15,
+
+        y
+
+    );
+
+    y += 6;
+
+    pdf.text(
+
+        `Despesas: ${formatarMoeda(despesas)}`,
+
+        15,
+
+        y
+
+    );
+
+    y += 15;
+
+    // =====================================
+    // MOVIMENTAÇÕES
+    // =====================================
+
+    pdf.setFontSize(
+        13
+    );
+
+    pdf.text(
+        "MOVIMENTAÇÕES",
+        10,
+        y
+    );
 
     y += 10;
 
+    desenharCabecalhoTabela();
+
     let saldo = 0;
 
-    const historicoOrdenado =
-    [...data.historico];
+    historico.forEach(item=>{
 
-    historicoOrdenado.forEach(item=>{
-
-        if(y > 260){
+        if(y > 265){
 
             adicionarRodape();
 
@@ -346,18 +673,32 @@ async function gerarPDF(){
 
             y = 20;
 
+            desenharCabecalhoTabela();
+
         }
 
         if(
-            item.tipo === "receita" ||
+
+            item.tipo === "receita"
+
+            ||
+
             item.tipo === "resgate"
+
         ){
 
             saldo += item.valor;
 
-        }else if(
-            item.tipo === "despesa" ||
+        }
+
+        else if(
+
+            item.tipo === "despesa"
+
+            ||
+
             item.tipo === "deposito"
+
         ){
 
             saldo -= item.valor;
@@ -365,55 +706,168 @@ async function gerarPDF(){
         }
 
         const descricao =
+
         item.descricao
-        ? item.descricao.substring(
+
+        ?
+
+        item.descricao.substring(
             0,
             35
         )
-        : "-";
 
-        pdf.setFontSize(8);
+        :
+
+        "-";
+
+        pdf.setFontSize(
+            8
+        );
+
+        pdf.setTextColor(
+            0,
+            0,
+            0
+        );
 
         pdf.text(
-            (item.dataFormatada || item.data || "")
-            .substring(0,10),
+
+            (
+                item.dataFormatada
+                ||
+                item.data
+                ||
+                ""
+            ).substring(
+                0,
+                10
+            ),
+
             12,
+
             y
+
         );
 
         pdf.text(
-            traduzirTipo(item.tipo),
+
+            traduzirTipo(
+                item.tipo
+            ),
+
             45,
+
             y
+
         );
 
         pdf.text(
+
             descricao,
+
             75,
+
             y
+
         );
 
+        // ====================
+        // VALOR COLORIDO
+        // ====================
+
+        if(
+
+            item.tipo ===
+            "despesa"
+
+        ){
+
+            pdf.setTextColor(
+                220,
+                0,
+                0
+            );
+
+        }
+
+        else if(
+
+            item.tipo ===
+            "receita"
+
+        ){
+
+            pdf.setTextColor(
+                0,
+                140,
+                0
+            );
+
+        }
+
         pdf.text(
-            formatarMoeda(item.valor),
+
+            formatarMoeda(
+                item.valor
+            ),
+
             145,
+
             y
+
         );
 
-        pdf.text(
-            formatarMoeda(saldo),
-            175,
-            y
+        pdf.setTextColor(
+            0,
+            0,
+            0
         );
+
+       if(saldo < 0){
+
+    pdf.setTextColor(
+        220,
+        0,
+        0
+    );
+
+}else{
+
+    pdf.setTextColor(
+        0,
+        140,
+        0
+    );
+
+}
+
+pdf.text(
+
+    formatarMoeda(
+        saldo
+    ),
+
+    175,
+
+    y
+
+);
+
+pdf.setTextColor(
+    0,
+    0,
+    0
+);
 
         y += 6;
 
     });
 
-    y += 8;
+    y += 10;
 
-    // =========================
+    // =====================================
     // CAIXINHAS
-    // =========================
+    // =====================================
 
     if(y > 220){
 
@@ -434,7 +888,9 @@ async function gerarPDF(){
 
     y += 10;
 
-    pdf.setFontSize(12);
+    pdf.setFontSize(
+        13
+    );
 
     pdf.text(
         "CAIXINHAS",
@@ -445,25 +901,46 @@ async function gerarPDF(){
     y += 10;
 
     pdf.setFillColor(
-        220,
-        220,
-        220
+        230,
+        230,
+        230
     );
 
     pdf.rect(
         10,
-        y-5,
+        y - 5,
         190,
         8,
         "F"
     );
 
-    pdf.setFontSize(9);
+    pdf.setFontSize(
+        9
+    );
 
-    pdf.text("NOME",12,y);
-    pdf.text("SALDO",95,y);
-    pdf.text("META",135,y);
-    pdf.text("FALTA",170,y);
+    pdf.text(
+        "NOME",
+        12,
+        y
+    );
+
+    pdf.text(
+        "SALDO",
+        95,
+        y
+    );
+
+    pdf.text(
+        "META",
+        135,
+        y
+    );
+
+    pdf.text(
+        "FALTA",
+        170,
+        y
+    );
 
     y += 10;
 
@@ -499,9 +976,69 @@ async function gerarPDF(){
 
     adicionarRodape();
 
-    function adicionarRodape(){
+    // =====================================
+    // CABEÇALHO DA TABELA
+    // =====================================
 
-        pdf.setFontSize(8);
+    function desenharCabecalhoTabela(){
+
+        pdf.setFillColor(
+            230,
+            230,
+            230
+        );
+
+        pdf.rect(
+            10,
+            y - 5,
+            190,
+            8,
+            "F"
+        );
+
+        pdf.setFontSize(
+            9
+        );
+
+        pdf.text(
+            "DATA",
+            12,
+            y
+        );
+
+        pdf.text(
+            "TIPO",
+            45,
+            y
+        );
+
+        pdf.text(
+            "DESCRIÇÃO",
+            75,
+            y
+        );
+
+        pdf.text(
+            "VALOR",
+            150,
+            y
+        );
+
+        pdf.text(
+            "SALDO",
+            178,
+            y
+        );
+
+        y += 10;
+
+    }
+
+    // =====================================
+    // RODAPÉ
+    // =====================================
+
+    function adicionarRodape(){
 
         pdf.line(
             10,
@@ -510,16 +1047,26 @@ async function gerarPDF(){
             280
         );
 
+        pdf.setFontSize(
+            8
+        );
+
         pdf.text(
+
             "Relatório gerado automaticamente pelo Sistema Financeiro ORCDev",
+
             40,
+
             286
+
         );
 
     }
 
     pdf.save(
-        `Extrato-ORCDev-${Date.now()}.pdf`
+
+        `${titulo.replaceAll(" ","-")}-${Date.now()}.pdf`
+
     );
 
     toast(
@@ -528,4 +1075,71 @@ async function gerarPDF(){
     );
 
 }
-//termina async de gerar pdf
+// =====================================
+// RELATÓRIO GERAL
+// =====================================
+
+async function gerarPDFgeral(){
+
+    const historico =
+    [...data.historico];
+
+    await gerarPDF(
+
+        historico,
+
+        "EXTRATO FINANCEIRO GERAL",
+
+        calcularReceitas(
+            historico
+        ),
+
+        calcularDespesas(
+            historico
+        )
+
+    );
+
+}
+
+// =====================================
+// RELATÓRIO MENSAL
+// =====================================
+
+async function gerarPDFmensal(){
+
+    const historicoMensal =
+    obterHistoricoMesAtual();
+
+    if(
+        historicoMensal.length === 0
+    ){
+
+        toast(
+            "Nenhuma movimentação encontrada neste mês.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    await gerarPDF(
+
+        historicoMensal,
+
+        "EXTRATO FINANCEIRO MENSAL",
+
+        calcularReceitas(
+            historicoMensal
+        ),
+
+        calcularDespesas(
+            historicoMensal
+        ),
+
+        referenciaMesAtual()
+
+    );
+
+}

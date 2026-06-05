@@ -3,6 +3,14 @@
 let tipoMovimentacaoSelecionado = "receita";
 
 function renderMovimentacoes(){
+    if(
+            !exigirLogin()
+        ){
+            return;
+        }
+        
+        const user =
+        usuarioAtual();
 
     let html = `
 

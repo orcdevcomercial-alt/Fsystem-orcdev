@@ -1,27 +1,18 @@
-import {
-    usuarioAtual,
-    logoutGoogle
-} from "./auth.js";
+
 
 // =====================================
 // MINHA CONTA
 // =====================================
 
 function renderMinhaConta(){
+if(
+    !exigirLogin()
+){
+    return;
+}
 
-    const user =
-    usuarioAtual();
-
-    if(!user){
-
-        toast(
-            "Usuário não autenticado",
-            "error"
-        );
-
-        return;
-
-    }
+const user =
+usuarioAtual();
 
     document.getElementById(
         "page-content"

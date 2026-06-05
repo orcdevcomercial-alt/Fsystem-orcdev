@@ -99,35 +99,6 @@ O sistema utiliza recursos de segurança fornecidos pela plataforma Firebase e b
 
 ---
 
-📚 Estrutura do Projeto
-
-ORCDev-Finance/
-│
-├── assets/
-│   ├── css/
-│   ├── icons/
-│   └── logo/
-│
-├── pages/
-│   ├── dashboard.js
-│   ├── ui.js
-
-│   ├── ui.js
-│   ├── helpers.js
-│   ├── relatorios.js
-│   └── configurações.js
-│
-│   ├── config.js
-│   ├── auth.js
-│   └── database.js
-│
-├── index.html
-├── login.html
-├── dashboard.html
-└── README.md
-
----
-
 👨‍💻 Desenvolvedor
 
 Ryan Santos Motta

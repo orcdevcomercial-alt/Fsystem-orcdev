@@ -1,6 +1,14 @@
 //Este é responsável pelo dashboard visual do usuario
 
 function renderDashboard(){
+    if(
+        !exigirLogin()
+    ){
+        return;
+    }
+    
+    const user =
+    usuarioAtual();
 
     document.getElementById(
         "page-content"

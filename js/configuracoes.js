@@ -1,5 +1,7 @@
 //Este é a primeira função de alterar tema
+
 function renderConfig(){
+    
 
     document.getElementById(
         "page-content"

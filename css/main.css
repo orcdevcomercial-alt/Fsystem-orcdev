@@ -31,9 +31,18 @@ body.menu-open{
 .logo{
     font-size:22px;
     font-weight:200;
+    width: auto;
+    height: auto;
+   
     
     color:var(--primary);
     margin-bottom:30px;
+}
+.logo img{
+    background: transparent;
+    max-width: 60%;
+    max-height: 60%;
+    display: block;
 }
 
 .sidebar nav{

@@ -3,6 +3,14 @@
 // =====================================
 
 function renderRelatorios(){
+    if(
+        !exigirLogin()
+    ){
+        return;
+    }
+    
+    const user =
+    usuarioAtual();
 
     document.getElementById(
         "page-content"

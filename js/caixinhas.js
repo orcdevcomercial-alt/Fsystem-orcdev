@@ -1,6 +1,15 @@
 //Este é o controle de Caixinhas/Reservas
 //Aqui começa a funcionalidade das caixinhas
+
 function renderCaixinhas(){
+    if(
+        !exigirLogin()
+    ){
+        return;
+    }
+    
+    const user =
+    usuarioAtual();
 
     let html = `
 

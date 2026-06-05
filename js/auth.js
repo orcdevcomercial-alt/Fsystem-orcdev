@@ -1,3 +1,4 @@
+
 import {
     auth
 } from "./firebase.js";
@@ -10,12 +11,18 @@ import {
 import {
     GoogleAuthProvider,
     signInWithPopup,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-const provider = new GoogleAuthProvider();
+const provider =
+new GoogleAuthProvider();
 
-function mostrarTelaLogin(){
+// =====================================
+// TELA DE LOGIN
+// =====================================
+
+export function mostrarTelaLogin(){
 
     document.getElementById(
         "page-content"
@@ -25,6 +32,7 @@ function mostrarTelaLogin(){
         max-width:420px;
         margin:80px auto;
         text-align:center;
+        color:black;
         background:white;
         padding:30px;
         border-radius:20px;
@@ -62,6 +70,10 @@ function mostrarTelaLogin(){
 
 }
 
+// =====================================
+// LOGIN GOOGLE
+// =====================================
+
 async function loginGoogle(){
 
     try{
@@ -82,23 +94,117 @@ async function loginGoogle(){
     }
 
 }
-//Desnecessario
-//window.salvar = salvar;
-//window.carregar = carregar;
-onAuthStateChanged(auth, async (user) => {
 
-    if(user){
+// =====================================
+// MONITORAMENTO DE SESSÃO
+// =====================================
 
-        window.usuarioLogado = user;
+onAuthStateChanged(
 
-        await carregar();
+    auth,
 
-        renderDashboard();
+    async (user)=>{
 
-    }else{
+        if(user){
 
-        mostrarTelaLogin();
+            window.usuarioLogado =
+            user;
+
+            await carregar();
+
+            renderDashboard();
+
+        }else{
+
+            mostrarTelaLogin();
+
+        }
 
     }
 
-});
+);
+
+// =====================================
+// EXPORTA LOGIN
+// =====================================
+
+export {
+    loginGoogle
+};
+// =====================================
+// LOGOUT GOOGLE
+// =====================================
+
+export async function logoutGoogle(){
+
+    const confirmar = confirm(
+        "Deseja realmente sair da conta?"
+    );
+
+    if(!confirmar){
+        return;
+    }
+
+    try{
+
+        await signOut(
+            auth
+        );
+
+        toast(
+            "Logout realizado com sucesso",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "Erro ao realizar logout",
+            "error"
+        );
+
+    }
+
+}
+
+// =====================================
+// DADOS DO USUÁRIO
+// =====================================
+
+export function usuarioAtual(){
+
+    return auth.currentUser;
+
+}
+
+// =====================================
+// VERIFICA LOGIN
+// =====================================
+
+export function estaLogado(){
+
+    return !!auth.currentUser;
+
+}
+export function exigirLogin(){
+ console.log("exigirLogin executou");
+    if(!auth.currentUser){
+console.log("usuario nao logado");
+     toast("Faça login para acessar essa área",
+    "Warning");
+    
+        mostrarTelaLogin();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+window.exigirLogin = exigirLogin;
+window.usuarioAtual = usuarioAtual;
+window.logoutGoogle = logoutGoogle;

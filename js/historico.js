@@ -1,4 +1,5 @@
 //Comanda o histórico de transações feitas pelo usuario
+
 function registrarHistorico(
     tipo,
     descricao,
@@ -31,6 +32,14 @@ function registrarHistorico(
 
 //visual
 function renderHistorico(){
+    if(
+        !exigirLogin()
+    ){
+        return;
+    }
+    
+    const user =
+    usuarioAtual();
 
     document.getElementById(
         "page-content"
